@@ -17,6 +17,9 @@
   <modules>
     <module>node-configuration</module>
     <module>node-discovery</module>
+    <module>ms-common</module>
+    <module>ms-order</module>
+    <module>ms-customer</module>
   </modules>
 
 </project>
