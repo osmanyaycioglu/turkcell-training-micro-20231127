@@ -3,13 +3,15 @@ package training.spring.microservice.msorder.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import training.spring.microservice.mscustomerapi.Customer;
+import training.spring.microservice.msorder.integrations.CustomerProvisionIntegration;
 import training.spring.microservice.msorder.integrations.CustomerQueryIntegration;
 import training.spring.microservice.msorder.services.models.Order;
 
 @Service
 @RequiredArgsConstructor
 public class OrderManagementService {
-    private final CustomerQueryIntegration customerQueryIntegration;
+    private final CustomerQueryIntegration     customerQueryIntegration;
+    private final CustomerProvisionIntegration customerProvisionIntegration;
 
     public void placeOrder(Order orderParam) {
 
@@ -41,6 +43,7 @@ public class OrderManagementService {
         Customer customerLoc  = null;
         try {
             customerLoc = customerQueryIntegration.getCustomer3(orderParam.getPhoneNumber());
+            customerProvisionIntegration.addCustomer(customerLoc);
         } catch (Exception eParam) {
             System.out.println("Problem anında yapılacak şeyler");
             throw eParam;
