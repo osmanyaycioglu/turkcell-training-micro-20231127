@@ -10,6 +10,8 @@ import java.util.List;
 @Jacksonized
 @Getter
 public class ErrorObj {
+    private String         boundedContext;
+    private String         microservice;
     private List<ErrorObj> subErrors;
     private String         errorDesc;
     private Integer        errorCode;

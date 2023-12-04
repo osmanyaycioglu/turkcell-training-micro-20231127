@@ -1,12 +1,19 @@
 package training.spring.microservice.msorder.integrations;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
-import training.spring.microservice.msorder.integrations.models.Customer;
+import training.spring.microservice.mscommon.error.ErrorObj;
+import training.spring.microservice.mscommon.error.RemoteException;
+import training.spring.microservice.mscustomerapi.Customer;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,9 +27,25 @@ public class CustomerQueryIntegration {
 
 
     public Customer getCustomer(String phone) {
-        Customer customerLoc = restTemplate.getForObject("http://CUSTOMER/api/v1/customer/query/find/one?phone="
-                                                         + phone,
-                                                         Customer.class);
+        Customer customerLoc = null;
+        try {
+            customerLoc = restTemplate.getForObject("http://CUSTOMER/api/v1/customer/query/find/one?phone="
+                                                    + phone,
+                                                    Customer.class);
+        } catch (RestClientResponseException eParam) {
+            ObjectMapper objectMapperLoc = new ObjectMapper();
+            try {
+                ErrorObj errorObjLoc = objectMapperLoc.readValue(eParam.getResponseBodyAsByteArray(),
+                                                                 ErrorObj.class);
+                throw new RemoteException(errorObjLoc);
+            } catch (IOException exParam) {
+                throw new RemoteException(ErrorObj.builder()
+                                                  .withErrorDesc("IO Problemi : " + exParam.getMessage())
+                                                  .withErrorCode(10033)
+                                                  .build());
+            }
+
+        }
         return customerLoc;
     }
 

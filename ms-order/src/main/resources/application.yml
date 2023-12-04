@@ -1,0 +1,26 @@
+microservice:
+    local:
+        info:
+            bounded-context: btx_order
+            microservice: ${spring.application.name}
+server:
+    error:
+        include-binding-errors: always
+        include-exception: true
+        include-message: always
+        include-stacktrace: never
+    port: ${uygulama.port:10000}
+spring:
+    application:
+        name: order
+    config:
+        import: configserver:http://127.0.0.1:8888
+    cloud:
+        openfeign:
+            client:
+                config:
+                  default:
+                      connect-timeout: 2000
+                      read-timeout: 5000
+                      logger-level: FULL
+                      dismiss404: false

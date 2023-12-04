@@ -7,11 +7,13 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import training.spring.microservice.mscommon.error.ErrorConfig;
+import training.spring.microservice.mscommon.error.FeignConfig;
 
 @EnableDiscoveryClient
 @EnableFeignClients
 @SpringBootApplication
-@Import(ErrorConfig.class)
+@Import({ErrorConfig.class,
+         FeignConfig.class})
 public class MsOrderApplication {
 
 

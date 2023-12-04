@@ -10,4 +10,9 @@ public class ErrorConfig {
     public ErrorAdvice errorAdvice(){
         return new ErrorAdvice();
     }
+
+    @Bean
+    public ErrorConfiguration errorConfiguration(){
+        return new ErrorConfiguration();
+    }
 }

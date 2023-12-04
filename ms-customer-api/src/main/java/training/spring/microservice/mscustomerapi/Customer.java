@@ -1,4 +1,4 @@
-package training.spring.microservice.mscustomer;
+package training.spring.microservice.mscustomerapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

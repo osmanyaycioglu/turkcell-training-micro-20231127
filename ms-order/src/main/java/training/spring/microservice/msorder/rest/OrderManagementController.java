@@ -31,4 +31,16 @@ public class OrderManagementController {
         return "OK";
     }
 
+    @PostMapping("/place1")
+    public String placeOrder1(@Valid @RequestBody OrderDto orderDtoParam) {
+        orderManagementService.placeOrder1(IOrderMapping.INSTANCE.toOrder(orderDtoParam));
+        return "OK";
+    }
+
+    @PostMapping("/place2")
+    public String placeOrder2(@Valid @RequestBody OrderDto orderDtoParam) {
+        orderManagementService.placeOrder2(IOrderMapping.INSTANCE.toOrder(orderDtoParam));
+        return "OK";
+    }
+
 }
