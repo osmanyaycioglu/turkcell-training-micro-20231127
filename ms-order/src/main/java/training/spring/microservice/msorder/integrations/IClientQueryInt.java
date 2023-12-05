@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import training.spring.microservice.mscustomerapi.ICustomerQueryController;
 
-@FeignClient(value = "CUSTOMER",contextId = "clientQuery")
+@FeignClient(value = "API-CUSTOMER",contextId = "clientQuery")
 public interface IClientQueryInt extends ICustomerQueryController {
 
 }

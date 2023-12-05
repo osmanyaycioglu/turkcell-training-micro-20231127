@@ -1,10 +1,15 @@
 package training.spring.microservice.msorder.integrations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
@@ -25,7 +30,8 @@ public class CustomerQueryIntegration {
 
     private int count = 0;
 
-
+    @Retry(name = "customerQuery",fallbackMethod = "getCustomerFallback")
+    @CircuitBreaker(name = "cq_cb")
     public Customer getCustomer(String phone) {
         Customer customerLoc = null;
         try {
@@ -47,6 +53,11 @@ public class CustomerQueryIntegration {
 
         }
         return customerLoc;
+    }
+
+    public Customer getCustomerFallback(String phone,Exception exp) {
+        System.out.println("get customer fallback");
+        return new Customer();
     }
 
     public Customer getCustomer2(String phone) {

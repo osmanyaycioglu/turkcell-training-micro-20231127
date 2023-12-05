@@ -4,6 +4,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,19 +25,30 @@ import training.spring.microservice.mscustomer.models.FraudQueryRequest;
 import training.spring.microservice.mscustomer.models.FraudQueryResult;
 import training.spring.microservice.mscustomerapi.Customer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @RestController
 @RequiredArgsConstructor
 public class CustomerProvisionController {
     private final ReactorLoadBalancerExchangeFilterFunction lbFilterFunction;
 
-    @GetMapping(value = "/api/v1/customer/provision/get/all",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Value("${server.port}")
+    private int port;
+
+    @GetMapping(value = "/api/v1/customer/provision/get/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<Customer> GetAllCustomers() {
-        return Flux.just(new Customer(),new Customer());
+        return Flux.just(
+                new Customer("osman","yaycıoğlu",10D,"LocalPort:" + port,"xyz"),
+                new Customer("ali","veli",20D,"LocalPort:" + port,"xyz"));
     }
 
+    private AtomicInteger counter    = new AtomicInteger();
 
-        @PostMapping("/api/v1/customer/provision/add")
+    @PostMapping("/api/v1/customer/provision/add")
     public Mono<AddResult> add(Customer customerParam) {
+        counter.incrementAndGet();
         HttpClient httpClientLoc = HttpClient.create()
                                              .option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
                                                      2000)
@@ -67,7 +79,6 @@ public class CustomerProvisionController {
                            return Mono.just(new AddResult(f.toString(),
                                                           "128973123"));
                        });
-
     }
 
 }

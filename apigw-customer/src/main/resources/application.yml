@@ -1,0 +1,36 @@
+server:
+    port: ${uygulama.port:7070}
+spring:
+    application:
+        name: api-customer
+    cloud:
+        config:
+            discovery:
+                enabled: true
+        gateway:
+            routes:
+                - id: customerRoute
+                  uri: lb://CUSTOMER
+                  predicates:
+                      - Path=/api/v1/customer/**
+                - id: testRoute
+                  uri: lb://CUSTOMER
+                  predicates:
+                      - name: TestPredicate
+                        args:
+                          testStr: osman
+                          doIt: true
+                  filters:
+                    - LoggerFilter='osman',true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:5555/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+
+

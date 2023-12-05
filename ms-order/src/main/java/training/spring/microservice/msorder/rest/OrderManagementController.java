@@ -1,6 +1,7 @@
 package training.spring.microservice.msorder.rest;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class OrderManagementController {
     private final OrderManagementService orderManagementService;
 //    private       List<String>           stringList      = Collections.synchronizedList(new ArrayList<>());
 //    private       Map<String, OrderDto>  stringStringMap = new ConcurrentHashMap<>();
-
+    @Operation(summary = "Place new order", description = "Place new order description")
     @PostMapping("/place")
     public String placeOrder(@Valid @RequestBody OrderDto orderDtoParam) {
         orderManagementService.placeOrder(IOrderMapping.INSTANCE.toOrder(orderDtoParam));

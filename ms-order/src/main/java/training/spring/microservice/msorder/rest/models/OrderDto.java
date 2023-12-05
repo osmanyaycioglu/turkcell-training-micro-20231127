@@ -1,5 +1,6 @@
 package training.spring.microservice.msorder.rest.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,6 +17,7 @@ public class OrderDto {
     @NotEmpty
     @NotBlank
     @Size(min = 9)
+    @Schema(description = "GSM Number must be without 0",example = "54345022310")
     private String phoneNumber;
     @NotEmpty
     @NotBlank

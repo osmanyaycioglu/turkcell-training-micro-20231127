@@ -24,3 +24,43 @@ spring:
                       read-timeout: 5000
                       logger-level: FULL
                       dismiss404: false
+        loadbalancer:
+            retry:
+                max-retries-on-next-service-instance: 3
+                max-retries-on-same-service-instance: 0
+            stats:
+                micrometer:
+                    enabled: true
+management:
+    endpoint:
+        health:
+            show-details: always
+            show-components: always
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+resilience4j:
+    retry:
+        metrics:
+            enabled: true
+        instances:
+            customerQuery:
+                max-attempts: 3
+                wait-duration: 100ms
+                retry-exception-predicate: training.spring.microservice.msorder.resilience.RetryExpPredicate
+                result-predicate: training.spring.microservice.msorder.resilience.RetryResultPredicate
+    circuitbreaker:
+        metrics:
+            enabled: true
+        instances:
+            cq_cb:
+                sliding-window-type: count_based
+                sliding-window-size: 20
+                failure-rate-threshold: 30
+                minimum-number-of-calls: 10
+                automatic-transition-from-open-to-half-open-enabled: false
+                max-wait-duration-in-half-open-state: 10s
+                permitted-number-of-calls-in-half-open-state: 10
+                slow-call-duration-threshold: 1s
+                slow-call-rate-threshold: 60
