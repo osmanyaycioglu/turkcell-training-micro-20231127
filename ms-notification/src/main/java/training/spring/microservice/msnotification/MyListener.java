@@ -19,7 +19,7 @@ public class MyListener {
                     durable = "true",
                     type = ExchangeTypes.TOPIC),
             key = "send.sms.#"))
-    public void handleSMS(String message) {
+    public void handleSMS(Message message) {
         System.out.println("Received sms : " + message);
     }
 
@@ -31,7 +31,7 @@ public class MyListener {
                     durable = "true",
                     type = ExchangeTypes.TOPIC),
             key = "send.email.#"))
-    public void handleEMAIL(String message) {
+    public void handleEMAIL(Message message) {
         System.out.println("Received email : " + message);
     }
 
